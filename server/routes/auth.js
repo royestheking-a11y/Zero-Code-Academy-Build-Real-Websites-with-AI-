@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
                 await Notification.create({
                     userId: email,
                     type: 'system',
-                    title: 'স্বাগতম Zero Code Hub-এ!',
+                    title: 'স্বাগতম Zero Code Academy-এ!',
                     message: `হ্যালো ${enrollment.name}! আপনার কোর্সে স্বাগতম। আপনার লার্নিং জার্নি শুরু হয়ে গেছে।`,
                     link: '/student-dashboard',
                     read: false

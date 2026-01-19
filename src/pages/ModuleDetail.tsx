@@ -106,28 +106,28 @@ export default function ModuleDetail() {
             {/* LEFT: Main Content (Video & Details) */}
             <div className="lg:col-span-2 space-y-8">
 
-              <div className="bg-black rounded-2xl overflow-hidden shadow-2xl aspect-video relative group">
+              <div className={`bg-black rounded-2xl overflow-hidden shadow-2xl relative group ${isLocked ? "aspect-auto min-h-[450px] md:aspect-video md:min-h-0" : "aspect-video"}`}>
                 {isLocked ? (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/95 text-white p-6 text-center z-20 backdrop-blur-sm">
                     {/* Premium Lock Icon */}
-                    <div className="w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center relative">
+                    <div className="w-16 h-16 md:w-24 md:h-24 mb-4 md:mb-6 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center relative shrink-0">
                       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 animate-ping opacity-50"></div>
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/30 ring-4 ring-black/50">
-                        <Lock className="w-8 h-8 text-white stroke-[3]" />
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-purple-500/30 ring-4 ring-black/50">
+                        <Lock className="w-6 h-6 md:w-8 md:h-8 text-white stroke-[3]" />
                       </div>
                     </div>
 
-                    <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+                    <h2 className="text-xl md:text-2xl font-bold mb-2 bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                       কন্টেন্ট লক করা আছে
                     </h2>
-                    <p className="text-gray-400 max-w-md mx-auto mb-8 leading-relaxed">
+                    <p className="text-gray-400 text-sm md:text-base max-w-md mx-auto mb-6 md:mb-8 leading-relaxed">
                       এই প্রিমিয়াম কন্টেন্ট এবং রিসোর্সগুলো শুধুমাত্র এনরোল করা স্টুডেন্টদের জন্য। সম্পূর্ণ এক্সেস পেতে অনুগ্রহ করে লগইন বা এনরোল করুন।
                     </p>
-                    <div className="flex gap-4">
-                      <Button onClick={() => navigate("/login")} className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-0 shadow-lg shadow-purple-500/25">
+                    <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                      <Button onClick={() => navigate("/login")} className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-0 shadow-lg shadow-purple-500/25">
                         লগইন করুন
                       </Button>
-                      <Button variant="outline" onClick={() => navigate("/enroll")} className="border-white/20 text-white hover:bg-white/10">
+                      <Button variant="outline" onClick={() => navigate("/enroll")} className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10">
                         এনরোল করুন
                       </Button>
                     </div>

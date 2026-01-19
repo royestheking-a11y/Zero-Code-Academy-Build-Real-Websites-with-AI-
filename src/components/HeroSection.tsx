@@ -57,11 +57,11 @@ export const HeroSection = () => {
             <div className="flex items-center gap-2">
               <div className="flex -space-x-3">
                 {[
-                  "https://i.pravatar.cc/100?img=33",
-                  "https://i.pravatar.cc/100?img=47",
-                  "https://i.pravatar.cc/100?img=12",
-                  "https://i.pravatar.cc/100?img=5",
-                  "https://i.pravatar.cc/100?img=3"
+                  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&q=80&fit=crop&auto=format",
+                  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&q=80&fit=crop&auto=format",
+                  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&q=80&fit=crop&auto=format",
+                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&q=80&fit=crop&auto=format",
+                  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&q=80&fit=crop&auto=format"
                 ].map((src, i) => (
                   <div
                     key={i}
