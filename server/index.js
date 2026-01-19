@@ -21,6 +21,11 @@ app.get('/', (req, res) => {
     res.send('Zero Code Backend is Running');
 });
 
+// Keep-Alive Endpoint for Cron-Job.org
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Import Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/content', require('./routes/content'));
