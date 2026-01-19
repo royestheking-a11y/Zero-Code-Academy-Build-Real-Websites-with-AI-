@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
+import { SEO } from "@/components/SEO";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -121,6 +122,11 @@ export default function Enroll() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Enroll Now"
+        description="Join Zero Code Academy and start your journey to becoming a professional web developer without coding."
+        keywords={["Enroll Zero Code", "Web development course admission", "Buy course"]}
+      />
       <Header />
 
       <main className="pt-28 pb-20">

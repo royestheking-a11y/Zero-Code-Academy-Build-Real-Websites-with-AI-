@@ -1,5 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { SEO } from "@/components/SEO";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { modules, Module } from "@/data/modules";
@@ -82,6 +83,10 @@ export default function ModuleDetail() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-background">
+      <SEO
+        title={module?.title || "Module Detail"}
+        description={module?.description || "Access course module details and resources."}
+      />
       <Header />
 
       <main className="pt-24 pb-20">

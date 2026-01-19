@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
+import { SEO } from "@/components/SEO";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Play, CheckCircle, ArrowRight, X, Check } from "lucide-react";
@@ -28,6 +29,11 @@ export default function Demo() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Course Demo"
+        description="Watch demo videos of Zero Code Academy. See how you can build apps with AI."
+        keywords={["Demo video", "Course preview", "Zero Code demo"]}
+      />
       <Header />
 
       <main className="pt-28 pb-20">

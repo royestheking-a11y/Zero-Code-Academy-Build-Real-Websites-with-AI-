@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
+import { SEO } from "@/components/SEO";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +62,10 @@ const Login = () => {
 
     return (
         <div className="min-h-screen bg-background flex flex-col">
+            <SEO
+                title="Student Login"
+                description="Login to your Zero Code Academy student account to access course modules and resources."
+            />
             <Header />
             <main className="flex-1 flex items-center justify-center py-24 px-4">
                 <div className="w-full max-w-md bg-card border rounded-2xl shadow-lg p-8">
