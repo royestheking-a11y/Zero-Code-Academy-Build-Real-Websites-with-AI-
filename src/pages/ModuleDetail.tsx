@@ -57,6 +57,25 @@ export default function ModuleDetail() {
   }, [moduleId, allModules]);
 
 
+  // Helper to convert standard YouTube URLs to Embed URLs
+  const getEmbedUrl = (url: string) => {
+    if (!url) return "";
+
+    // Handle standard watch URLs (youtube.com/watch?v=ID or youtu.be/ID)
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/);
+    if (match) {
+      return `https://www.youtube.com/embed/${match[1]}?rel=0`;
+    }
+
+    // Handle already embedded URLs
+    if (url.includes("youtube.com/embed/")) {
+      // Add rel=0 if not present to minimize recommended videos
+      return url.includes("?") ? `${url}&rel=0` : `${url}?rel=0`;
+    }
+
+    return url;
+  };
+
   if (!module) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
@@ -73,8 +92,6 @@ export default function ModuleDetail() {
       </div>
     );
   }
-
-
 
   const isModuleEnrolled = user && (user.enrolledModules?.includes(module?.id) || true); // Assuming all students have access for now, or match ID
   // Strictly lock content if user is NOT logged in
@@ -134,7 +151,7 @@ export default function ModuleDetail() {
                   </div>
                 ) : module.videoUrl ? (
                   <iframe
-                    src={module.videoUrl}
+                    src={getEmbedUrl(module.videoUrl)}
                     title={module.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
