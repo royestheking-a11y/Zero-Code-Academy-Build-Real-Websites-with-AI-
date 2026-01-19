@@ -6,7 +6,7 @@ const { generateUserAvatar } = require('../utils/avatarGenerator');
 // Login or Auto-Register
 // Login or Auto-Register based on Enrollment
 router.post('/login', async (req, res) => {
-    const { email } = req.body;
+    const { email, deviceId } = req.body;
 
     try {
         let user = await User.findOne({ email });
@@ -25,7 +25,12 @@ router.post('/login', async (req, res) => {
                     email: enrollment.email,
                     role: 'student',
                     enrolledModules: ['module-1'], // Default access or derive from package
-                    photo: avatarUrl
+                    photo: avatarUrl,
+                    sessions: [{
+                        deviceId: deviceId || 'unknown',
+                        lastLogin: new Date(),
+                        ip: req.ip
+                    }]
                 });
                 await user.save();
                 console.log('Created user from approved enrollment:', email);
@@ -44,6 +49,32 @@ router.post('/login', async (req, res) => {
                 console.log('Welcome notification created for:', email);
             } else {
                 return res.status(401).json({ message: 'আপনার অ্যাকাউন্ট অ্যাপ্রুভ হয়নি অথবা এনরোলমেন্ট খুঁজে পাওয়া যায়নি।' });
+            }
+        } else {
+            // User exists - Handle Device Consistency
+            if (deviceId) {
+                if (!user.sessions) user.sessions = [];
+
+                // Remove current device if present (to update timestamp)
+                user.sessions = user.sessions.filter(s => s.deviceId !== deviceId);
+
+                // Add new session
+                user.sessions.push({
+                    deviceId,
+                    lastLogin: new Date(),
+                    ip: req.ip
+                });
+
+                // Sort by lastLogin (newest first)
+                user.sessions.sort((a, b) => b.lastLogin - a.lastLogin);
+
+                // Enforce Max 2 Devices
+                if (user.sessions.length > 2) {
+                    console.log(`User ${email} exceeded device limit. Removing oldest session.`);
+                    user.sessions = user.sessions.slice(0, 2);
+                }
+
+                await user.save();
             }
         }
 

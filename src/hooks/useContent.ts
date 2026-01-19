@@ -7,7 +7,7 @@ import { PricingPackage, Feature, RoutineItem, Coupon, DemoVideo, Notification, 
 // Auth Hooks
 export const useLogin = () => {
     return useMutation({
-        mutationFn: async (credentials: { email: string; studentId?: string }) => {
+        mutationFn: async (credentials: { email: string; studentId?: string; deviceId?: string }) => {
             const { data } = await api.post('/auth/login', credentials);
             return data;
         }

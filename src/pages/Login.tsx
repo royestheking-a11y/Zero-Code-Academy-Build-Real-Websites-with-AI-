@@ -25,10 +25,23 @@ const Login = () => {
 
     const { mutate: login, isPending } = useLogin();
 
+    const getDeviceId = () => {
+        let deviceId = localStorage.getItem("device_id");
+        if (!deviceId) {
+            deviceId = typeof crypto !== 'undefined' && crypto.randomUUID
+                ? crypto.randomUUID()
+                : `device-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+            localStorage.setItem("device_id", deviceId);
+        }
+        return deviceId;
+    };
+
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
-        login({ email }, {
+        const deviceId = getDeviceId();
+
+        login({ email, deviceId }, {
             onSuccess: (data) => {
                 // Save session to localStorage for persistence
                 const sessionData = {
