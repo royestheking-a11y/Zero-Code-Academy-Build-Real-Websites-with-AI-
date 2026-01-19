@@ -1,9 +1,34 @@
-import { Facebook, Youtube, MessageCircle, Mail, Phone, AlertTriangle, CheckCircle, Shield, Check } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Facebook, Youtube, MessageCircle, Mail, Phone, AlertTriangle, CheckCircle, Shield, Check, ArrowUp } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 export const Footer = () => {
+  const location = useLocation();
+
+  const handleNavClick = (href: string) => {
+    if (href.startsWith("/#")) {
+      const id = href.replace("/#", "");
+      if (location.pathname === "/") {
+        // If on home page, smooth scroll to id
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      } else {
+        // If on other page, navigate will handle it, but we might need a timeout if strict hash is needed
+        // Since we are using Link to=href, it redirects. 
+        // For cross-page hash link to work perfectly, usually requires a useEffect in App or Layout to scroll on mount.
+        // But for "Footer", usually user clicks when they are at bottom.
+        // We will rely on Link default behavior for cross-page, but for same-page we use scrollIntoView.
+        // Actually, Link on same page might just set URL and jump if ID exists. Smooth scroll needs explicit call.
+      }
+    } else if (href === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <footer className="bg-foreground text-background">
+    <footer className="bg-foreground text-background relative">
       {/* Warning Notice */}
       <div className="bg-destructive/90 text-destructive-foreground py-4">
         <div className="container-custom">
@@ -47,7 +72,7 @@ export const Footer = () => {
       </div>
 
       {/* Main Footer */}
-      <div className="section-padding">
+      <div className="section-padding pb-8">
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* Brand */}
@@ -91,7 +116,14 @@ export const Footer = () => {
                   { label: "ডেমো দেখুন", href: "/demo" },
                 ].map((link) => (
                   <li key={link.href}>
-                    <Link to={link.href} className="text-background/70 hover:text-primary transition-colors">
+                    <Link
+                      to={link.href}
+                      className="text-background/70 hover:text-primary transition-colors cursor-pointer"
+                      onClick={(e) => {
+                        // Conditional preventDefault manually if needed, but handleNavClick is better
+                        handleNavClick(link.href);
+                      }}
+                    >
                       {link.label}
                     </Link>
                   </li>
@@ -157,8 +189,8 @@ export const Footer = () => {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-background/10 pt-8">
-            <div className="text-center">
+          <div className="border-t border-background/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-center md:text-left">
               <p className="text-background/70 text-sm flex flex-col md:block items-center gap-2">
                 <span>© ২০২৫ Zero Code. সর্বস্বত্ব সংরক্ষিত।</span>
                 <span className="hidden md:inline mx-2">|</span>
@@ -172,6 +204,30 @@ export const Footer = () => {
                 </a>
               </p>
             </div>
+
+            {/* Scroll to Top Button */}
+            {/* Scroll to Top Button - Premium UI */}
+            <button
+              onClick={scrollToTop}
+              className="group relative px-5 py-2.5 rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--primary),0.3)] ring-1 ring-white/10 hover:ring-primary/50"
+              aria-label="Scroll to top"
+            >
+              {/* Gradient Background on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              <div className="relative flex items-center gap-3">
+                <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-300">
+                  উপরে যান
+                </span>
+
+                {/* Arrow Icon with Glow */}
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-purple-600 p-[1px] group-hover:scale-110 transition-transform duration-300 shadow-lg shadow-primary/20">
+                  <div className="w-full h-full rounded-full bg-black flex items-center justify-center group-hover:bg-transparent transition-colors duration-300">
+                    <ArrowUp className="w-4 h-4 text-white group-hover:scale-125 transition-transform duration-300" />
+                  </div>
+                </div>
+              </div>
+            </button>
           </div>
         </div>
       </div>
