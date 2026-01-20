@@ -356,32 +356,43 @@ export const Header = () => {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <Link to="/student-dashboard">
-                  <Button variant="outline" size="default" className="w-full">
-                    লগইন
-                  </Button>
-                </Link>
-                <Link to="/enroll">
-                  <Button variant="cta" size="default" className="w-full">
-                    এনরোল করুন
-                  </Button>
-                </Link>
+              <div className="bg-card/50 rounded-xl p-5 mb-4 border border-border shadow-sm text-center space-y-4">
+                <div className="space-y-1">
+                  <h4 className="font-bold text-foreground">যাত্রা শুরু করুন</h4>
+                  <p className="text-xs text-muted-foreground">লগইন করুন অথবা নতুন করে শেখা শুরু করুন</p>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  <Link to="/student-dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="outline" size="lg" className="w-full gap-2">
+                      <User className="w-4 h-4" /> লগইন
+                    </Button>
+                  </Link>
+                  <Link to="/enroll" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="cta" size="lg" className="w-full gap-2 shadow-lg shadow-primary/20">
+                      <Award className="w-4 h-4" /> এনরোল করুন
+                    </Button>
+                  </Link>
+                </div>
               </div>
             )}
 
-            <div className="h-px bg-border my-1" />
+            {!isLoggedIn && (
+              <>
+                <div className="h-px bg-border my-1" />
 
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => handleNavClick(item.href)}
-                className="text-foreground/80 hover:text-primary transition-colors font-medium py-3 text-lg border-b border-border/50 last:border-0 text-center"
-              >
-                {item.label}
-              </Link>
-            ))}
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => handleNavClick(item.href)}
+                    className="text-foreground/80 hover:text-primary transition-colors font-medium py-3 text-lg border-b border-border/50 last:border-0 text-center"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </>
+            )}
           </nav>
         </div>
       )}
