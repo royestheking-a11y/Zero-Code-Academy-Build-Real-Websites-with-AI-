@@ -16,7 +16,7 @@ export const AdminLogin = ({ onLogin }: AdminLoginProps) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // Simple mock auth
-        if (email === "admin@zerocode.com" && password === "admin123") {
+        if (email === "admin@zerocode.com" && password === "zerocode889") {
             onLogin();
             toast({ title: "সফল!", description: "অ্যাডমিন প্যানেলে স্বাগতম" });
         } else {
