@@ -17,14 +17,20 @@ const Subscription = require('../models/Subscription');
 const publicVapidKey = process.env.VAPID_PUBLIC_KEY;
 const privateVapidKey = process.env.VAPID_PRIVATE_KEY;
 
-webpush.setVapidDetails(
-    'mailto:zeroocode.bd@gmail.com',
-    publicVapidKey,
-    privateVapidKey
-);
+if (publicVapidKey && privateVapidKey) {
+    webpush.setVapidDetails(
+        'mailto:zeroocode.bd@gmail.com',
+        publicVapidKey,
+        privateVapidKey
+    );
+} else {
+    console.warn("⚠️ VAPID Keys missing in content.js. Push triggers disabled.");
+}
 
 // Helper to send global push
 const sendGlobalPush = async (title, message, url) => {
+    if (!publicVapidKey || !privateVapidKey) return; // Skip if no keys
+
     const payload = JSON.stringify({
         title: title,
         body: message,

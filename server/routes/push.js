@@ -9,14 +9,14 @@ const publicVapidKey = process.env.VAPID_PUBLIC_KEY;
 const privateVapidKey = process.env.VAPID_PRIVATE_KEY;
 
 if (!publicVapidKey || !privateVapidKey) {
-    console.error("VAPID Keys are missing! Make sure VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY are set in environment variables.");
+    console.warn("⚠️ VAPID Keys are missing! Push notifications will not work. Set VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY.");
+} else {
+    webpush.setVapidDetails(
+        'mailto:zeroocode.bd@gmail.com',
+        publicVapidKey,
+        privateVapidKey
+    );
 }
-
-webpush.setVapidDetails(
-    'mailto:zeroocode.bd@gmail.com',
-    publicVapidKey,
-    privateVapidKey
-);
 
 // Subscribe Route
 router.post('/subscribe', async (req, res) => {
