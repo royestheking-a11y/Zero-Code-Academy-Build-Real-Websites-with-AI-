@@ -1,73 +1,139 @@
-# Welcome to your Lovable project
+# Zero Code Academy - Build Real Websites with AI 🚀
 
-## Project info
+**Live Website**: [https://zerocodeacademy.vercel.app/](https://zerocodeacademy.vercel.app/)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Zero Code Academy is a cutting-edge EdTech platform designed to teach users how to build professional websites without writing a single line of code, leveraging the power of AI. The platform features a robust Student Dashboard, a comprehensive Admin Panel, and a fully functional PWA with System-level Push Notifications.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🌟 Key Features
 
-**Use Lovable**
+### 📱 **Progressive Web App (PWA) & Push Notifications**
+- **Installable App**: Can be installed on Android, iOS, and Desktop as a native-like app.
+- **Offline Capabilities**: Works offline with cached assets using Service Workers.
+- **System Push Notifications**: Users receive notifications in their device's notification bar (even when the app is closed) for:
+    - New Modules 📚
+    - Routine Updates 🗓️
+    - Admin Announcements 🔔
+- **Smart Subscription**: Custom `PushSubscriptionWrapper` automatically handles permission requests.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### 🎓 **Student Dashboard**
+- **Personalized Learning Path**: Dynamic timeline showing module start/end dates based on enrollment.
+- **Progress Tracking**: Visual progress bars, completed modules count, and points system.
+- **Interactive Modules**: Detailed module pages with video players, resource links, and topic breakdowns.
+- **Live Class Routine**: Sidebar widget showing upcoming classes with direct Zoom/Meet links.
+- **Profile Management**: Profile image upload, password management, and session control.
 
-Changes made via Lovable will be committed automatically to this repo.
+### 🛠️ **Admin Panel**
+- **Content Management System (CMS)**:
+    - **Modules Manager**: Create/Edit/Delete course modules.
+    - **Routine Manager**: Manage live class schedules (Date, Time, Platform).
+    - **Demo Manager**: Upload and manage demo videos for the landing page.
+    - **Pricing & Coupons**: Manage pricing packages and create dynamic discount coupons.
+    - **Features Manager**: Update "What you will learn" section dynamically.
+- **User Management**: View enrolled students (more features coming soon).
+- **Notification Center**: Send manual push notifications to all users instantly.
+- **Security**: Mock Authentication (can be replaced with Supabase/Firebase).
 
-**Use your preferred IDE**
+### 🎨 **Frontend & UX**
+- **Premium UI/UX**: Built with **shadcn/ui**, **Tailwind CSS**, and **Framer Motion** for smooth animations.
+- **Responsive Design**: Fully optimized for Mobile, Tablet, and Desktop.
+- **Modern Landing Page**:
+    - Hero Section with premium avatars (Dicebear).
+    - Dynamic Pricing Section.
+    - Interactive "How It Works" & Features grid.
+    - SEO Optimized (Meta tags, JSON-LD, Sitemap).
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### ⚙️ **Backend & Architecture**
+- **MERN Stack**:
+    - **Frontend**: React (Vite), TypeScript.
+    - **Backend**: Node.js, Express.js.
+    - **Database**: MongoDB Atlas (Cloud).
+- **Deployment**:
+    - **Frontend**: Vercel.
+    - **Backend**: Render.com.
+- **Security**: Environment variables for sensitive keys (VAPID, MongoURI).
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🛠️ Technologies Used
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **Core**: [React 18](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/), [shadcn/ui](https://ui.shadcn.com/)
+- **State Management**: [TanStack Query (React Query)](https://tanstack.com/query/latest)
+- **Backend API**: Node.js, Express.js
+- **Database**: MongoDB (Mongoose)
+- **PWA & Notifications**: `vite-plugin-pwa`, `web-push`, Service Workers
+- **Icons**: Lucide React
+- **Forms**: React Hook Form, Zod
+- **SEO**: React Helmet Async
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🚀 Getting Started
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### Prerequisites
+- Node.js (v18+)
+- MongoDB Atlas URI
+- VAPID Keys (for Push Notifications)
 
-**Edit a file directly in GitHub**
+### Installation
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/royestheking-a11y/Zero-Code-Academy-Build-Real-Websites-with-AI-.git
+   cd Zero-Code-Academy-Build-Real-Websites-with-AI-
+   ```
 
-**Use GitHub Codespaces**
+2. **Install Dependencies**
+   ```bash
+   # Install Root/Frontend dependencies
+   npm install
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+   # Install Server dependencies
+   cd server
+   npm install
+   cd ..
+   ```
 
-## What technologies are used for this project?
+3. **Configure Environment Variables**
+   
+   Create a `.env` file in the **root** directory:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   VITE_VAPID_PUBLIC_KEY=your_public_key_here
+   ```
 
-This project is built with:
+   Create a `.env` file in the **server** directory:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   PORT=5000
+   VAPID_PUBLIC_KEY=your_public_key_here
+   VAPID_PRIVATE_KEY=your_private_key_here
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+4. **Run the Project**
+   
+   **Start Backend**:
+   ```bash
+   cd server
+   node index.js
+   ```
 
-## How can I deploy this project?
+   **Start Frontend** (in a new terminal):
+   ```bash
+   npm run dev
+   ```
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+5. **Open in Browser**
+   Visit `http://localhost:5173` to see the app.
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 🤝 Contribution
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Feel free to fork this repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+**Built with ❤️ for the Zero Code Community in Bangladesh.**
