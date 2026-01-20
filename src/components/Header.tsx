@@ -117,13 +117,14 @@ export const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <img
-            src="/navbar logo.svg"
+            src="/navbar-logo.svg"
             alt="Zero Code"
             className="h-10 w-auto object-contain"
             width="150"
             height="40"
             // @ts-ignore
             fetchpriority="high"
+            decoding="sync"
           />
         </Link>
 

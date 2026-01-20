@@ -79,12 +79,12 @@ export const Footer = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <img
-                  src="/Footer logo.png"
+                  src="/footer-logo.png"
                   alt="Zero Code"
                   className="h-12 w-auto object-contain"
                   width="180"
                   height="48"
-                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <p className="text-background/70 leading-relaxed mb-6">
