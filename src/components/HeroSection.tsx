@@ -33,7 +33,7 @@ export const HeroSection = () => {
 
           {/* Subheadline */}
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            Zero Code — রিয়েল প্রজেক্ট বানিয়ে শিখুন। AI টুলস ব্যবহার করে ওয়েব অ্যাপ, মোবাইল অ্যাপ, SaaS সবকিছু তৈরি করুন কোনো কোডিং ছাড়াই!
+            Zero Code — রিয়েল প্রজেক্ট বানানো শিখুন। AI টুলস ব্যবহার করে ওয়েব অ্যাপ, মোবাইল অ্যাপ, SaaS সবকিছু তৈরি করুন কোনো কোডিং ছাড়াই!
           </p>
 
           {/* CTA Buttons */}

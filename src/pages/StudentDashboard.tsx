@@ -174,19 +174,23 @@ export default function StudentDashboard() {
 
   // --- Logic for Dates and Access ---
   const getModuleDateRange = (index: number) => {
-    if (!studentData?.enrolledAt) return { start: "TBD", end: "TBD" }; // Should not happen if logged in
+    // Fallback to today if enrolledAt is missing, preventing "TBD"
+    const enrollmentDateStr = studentData?.enrolledAt || new Date().toISOString();
 
     // Calculate cumulative weeks up to this module
     let weeksBefore = 0;
     for (let i = 0; i < index; i++) {
-      weeksBefore += modules[i].durationWeeks || 0;
+      // Use 2 weeks as default duration if missing
+      weeksBefore += modules[i].durationWeeks || 2;
     }
 
-    const startDate = new Date(studentData.enrolledAt);
+    const startDate = new Date(enrollmentDateStr);
+    // Add weeks * 7 days
     startDate.setDate(startDate.getDate() + (weeksBefore * 7));
 
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + ((modules[index].durationWeeks || 0) * 7));
+    // Add current module duration (default 2 weeks)
+    endDate.setDate(endDate.getDate() + ((modules[index].durationWeeks || 2) * 7));
 
     const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' };
 
