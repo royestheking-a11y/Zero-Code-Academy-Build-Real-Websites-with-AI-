@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { useCoupons, useAddCoupon, useDeleteCoupon } from "@/hooks/useContent";
 import { Coupon } from "@/types/content";
 import { Plus, Trash2, Tag } from "lucide-react";
@@ -79,6 +79,7 @@ export function CouponManager() {
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Add New Coupon</DialogTitle>
+                            <DialogDescription className="sr-only">Create a new discount coupon.</DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">

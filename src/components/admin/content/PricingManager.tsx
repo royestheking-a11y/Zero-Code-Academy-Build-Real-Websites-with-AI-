@@ -16,6 +16,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import { Edit2, Trash2, Plus, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -231,6 +232,7 @@ export const PricingManager = () => {
                 <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>প্যাকেজ এডিট/তৈরি</DialogTitle>
+                        <DialogDescription className="sr-only">Manage pricing package details.</DialogDescription>
                     </DialogHeader>
 
                     {editingPkg && (

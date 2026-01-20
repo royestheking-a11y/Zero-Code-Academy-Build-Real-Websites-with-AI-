@@ -18,6 +18,7 @@ import {
     DialogTitle,
     DialogTrigger,
     DialogFooter,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import { Edit2, Trash2, Plus, GripVertical } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -163,6 +164,7 @@ export const ModulesManager = () => {
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>Mডিউল এডিট/তৈরি</DialogTitle>
+                        <DialogDescription className="sr-only">Edit or create a course module.</DialogDescription>
                     </DialogHeader>
 
                     {editingModule && (

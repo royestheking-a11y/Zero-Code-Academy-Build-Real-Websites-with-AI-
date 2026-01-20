@@ -16,6 +16,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogFooter,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import { Edit2, Trash2, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -140,6 +141,7 @@ export const FeaturesManager = () => {
                 <DialogContent className="max-w-lg">
                     <DialogHeader>
                         <DialogTitle>ফিচার এডিট/তৈরি</DialogTitle>
+                        <DialogDescription className="sr-only">Add or edit feature details.</DialogDescription>
                     </DialogHeader>
 
                     {editingFeature && (

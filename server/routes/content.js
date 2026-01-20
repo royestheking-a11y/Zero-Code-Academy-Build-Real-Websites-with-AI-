@@ -136,6 +136,7 @@ router.post('/routine', async (req, res) => {
         res.status(400).json({ message: err.message });
     }
 });
+router.put('/routine/:id', routineCtrl.update); // Added PUT
 router.delete('/routine/:id', routineCtrl.delete);
 
 // --- Offer ---
@@ -144,18 +145,24 @@ router.get('/offer', async (req, res) => {
     const offer = await Offer.findOne();
     res.json(offer || {});
 });
-router.post('/offer', async (req, res) => {
-    // Upsert the single offer
-    await Offer.deleteMany({});
-    const newOffer = new Offer(req.body);
-    await newOffer.save();
-    res.json(newOffer);
-});
+const handleOfferUpsert = async (req, res) => {
+    try {
+        await Offer.deleteMany({});
+        const newOffer = new Offer(req.body);
+        await newOffer.save();
+        res.json(newOffer);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+};
+router.post('/offer', handleOfferUpsert);
+router.put('/offer', handleOfferUpsert); // Added PUT aliases to POST logic
 
 // --- Demo Videos ---
 const demoCtrl = createCrud(DemoVideo);
 router.get('/demo-videos', demoCtrl.getAll);
 router.post('/demo-videos', demoCtrl.create);
+router.put('/demo-videos/:id', demoCtrl.update); // Added PUT
 router.delete('/demo-videos/:id', demoCtrl.delete);
 
 // --- Coupons ---

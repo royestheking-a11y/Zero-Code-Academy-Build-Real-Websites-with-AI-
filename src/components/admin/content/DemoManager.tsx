@@ -172,6 +172,10 @@ export default function DemoManager() {
                 <DialogContent className="sm:max-w-[500px]">
                     <DialogHeader>
                         <DialogTitle>{editingVideo ? "ভিডিও এডিট করুন" : "নতুন ভিডিও যোগ করুন"}</DialogTitle>
+                        <div className="sr-only">
+                            {/* Accessibility Description */}
+                            <p>Fill in the details for the demo video.</p>
+                        </div>
                     </DialogHeader>
 
                     <div className="space-y-4 py-4">
