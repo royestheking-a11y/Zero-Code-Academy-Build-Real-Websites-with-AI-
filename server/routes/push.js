@@ -4,8 +4,13 @@ const webpush = require('web-push');
 const Subscription = require('../models/Subscription');
 
 // Configure VAPID Keys
-const publicVapidKey = 'BEQ4seXunpFinlvHKDbzS_rqRVwt5wC-NnxUt6-f0-HkyxVVKLwrdnvvD76aGYUJjTgOrcT3HK1ZsvYVWHnqX6g';
-const privateVapidKey = 'u7fb8gpCzutSihUu2_QY7U6svLot7niaxmulDaEEm9o';
+// Configure VAPID Keys
+const publicVapidKey = process.env.VAPID_PUBLIC_KEY;
+const privateVapidKey = process.env.VAPID_PRIVATE_KEY;
+
+if (!publicVapidKey || !privateVapidKey) {
+    console.error("VAPID Keys are missing! Make sure VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY are set in environment variables.");
+}
 
 webpush.setVapidDetails(
     'mailto:zeroocode.bd@gmail.com',

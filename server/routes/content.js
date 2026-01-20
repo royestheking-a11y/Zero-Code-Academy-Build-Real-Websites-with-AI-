@@ -13,8 +13,9 @@ const webpush = require('web-push');
 const Subscription = require('../models/Subscription');
 
 // VAPID Configuration (Same as push.js)
-const publicVapidKey = 'BEQ4seXunpFinlvHKDbzS_rqRVwt5wC-NnxUt6-f0-HkyxVVKLwrdnvvD76aGYUJjTgOrcT3HK1ZsvYVWHnqX6g';
-const privateVapidKey = 'u7fb8gpCzutSihUu2_QY7U6svLot7niaxmulDaEEm9o';
+// VAPID Configuration (Same as push.js)
+const publicVapidKey = process.env.VAPID_PUBLIC_KEY;
+const privateVapidKey = process.env.VAPID_PRIVATE_KEY;
 
 webpush.setVapidDetails(
     'mailto:zeroocode.bd@gmail.com',

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const PUBLIC_VAPID_KEY = 'BEQ4seXunpFinlvHKDbzS_rqRVwt5wC-NnxUt6-f0-HkyxVVKLwrdnvvD76aGYUJjTgOrcT3HK1ZsvYVWHnqX6g';
+const PUBLIC_VAPID_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
 function urlBase64ToUint8Array(base64String: string) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
