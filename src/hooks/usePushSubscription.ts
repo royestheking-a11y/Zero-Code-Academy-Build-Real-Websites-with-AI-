@@ -51,7 +51,8 @@ export const usePushSubscription = () => {
             });
 
             // Send subscription to backend
-            await axios.post('http://localhost:5000/api/push/subscribe', subscription);
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            await axios.post(`${apiUrl}/push/subscribe`, subscription);
 
             setIsSubscribed(true);
             console.log('Push subscription successful');
