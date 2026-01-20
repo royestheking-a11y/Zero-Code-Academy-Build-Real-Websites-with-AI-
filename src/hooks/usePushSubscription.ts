@@ -51,7 +51,7 @@ export const usePushSubscription = () => {
             });
 
             // Send subscription to backend
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+            const apiUrl = import.meta.env.VITE_API_URL || 'https://zero-code-academy-build-real-websites-with-ai.onrender.com/api';
             await axios.post(`${apiUrl}/push/subscribe`, subscription);
 
             setIsSubscribed(true);
