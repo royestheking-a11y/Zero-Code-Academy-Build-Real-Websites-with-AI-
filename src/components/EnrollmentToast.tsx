@@ -48,7 +48,20 @@ export const EnrollmentToast = () => {
     };
   }, []);
 
+  const isWithinTimeRange = () => {
+    // Get current time in Bangladesh (GMT+6)
+    const bdTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
+    const bdDate = new Date(bdTime);
+    const hour = bdDate.getHours();
+
+    // Show between 8 AM (8) and 2 AM (2)
+    // Means: Hour >= 8 OR Hour < 2
+    return hour >= 8 || hour < 2;
+  };
+
   const showEnrollmentToast = () => {
+    if (!isWithinTimeRange()) return;
+
     const randomName = fakeNames[Math.floor(Math.random() * fakeNames.length)];
     const randomLocation = locations[Math.floor(Math.random() * locations.length)];
     const minutesAgo = Math.floor(Math.random() * 10) + 1;
