@@ -30,6 +30,7 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/content', require('./routes/content'));
 app.use('/api/enrollments', require('./routes/enrollments'));
+app.use('/api/push', require('./routes/push'));
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

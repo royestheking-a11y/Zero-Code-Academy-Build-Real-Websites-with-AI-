@@ -9,6 +9,43 @@ const DemoVideo = require('../models/DemoVideo');
 const Coupon = require('../models/Coupon');
 const Notification = require('../models/Notification');
 
+const webpush = require('web-push');
+const Subscription = require('../models/Subscription');
+
+// VAPID Configuration (Same as push.js)
+const publicVapidKey = 'BEQ4seXunpFinlvHKDbzS_rqRVwt5wC-NnxUt6-f0-HkyxVVKLwrdnvvD76aGYUJjTgOrcT3HK1ZsvYVWHnqX6g';
+const privateVapidKey = 'u7fb8gpCzutSihUu2_QY7U6svLot7niaxmulDaEEm9o';
+
+webpush.setVapidDetails(
+    'mailto:zeroocode.bd@gmail.com',
+    publicVapidKey,
+    privateVapidKey
+);
+
+// Helper to send global push
+const sendGlobalPush = async (title, message, url) => {
+    const payload = JSON.stringify({
+        title: title,
+        body: message,
+        url: url,
+        icon: '/favicon/android-chrome-192x192.png'
+    });
+
+    try {
+        const subscriptions = await Subscription.find();
+        subscriptions.forEach(sub => {
+            webpush.sendNotification(sub, payload).catch(err => {
+                if (err.statusCode === 410 || err.statusCode === 404) {
+                    Subscription.deleteOne({ _id: sub._id }).exec();
+                }
+            });
+        });
+        console.log(`Push sent to ${subscriptions.length} subscribers`);
+    } catch (error) {
+        console.error('Push Error:', error);
+    }
+};
+
 // --- Helper to create generic CRUD ---
 const createCrud = (Model) => ({
     getAll: async (req, res) => {
@@ -82,6 +119,9 @@ router.post('/modules', async (req, res) => {
         if (notificationsToCreate.length > 0) {
             await Notification.insertMany(notificationsToCreate);
             console.log(`Sent module notification to ${students.length} students`);
+
+            // Send Push
+            sendGlobalPush('নতুন মডিউল! 📚', `"${req.body.title}" এখন উপলব্ধ।`, '/student-dashboard');
         }
 
         res.json(newModule);
@@ -129,6 +169,9 @@ router.post('/routine', async (req, res) => {
         if (notificationsToCreate.length > 0) {
             await Notification.insertMany(notificationsToCreate);
             console.log(`Sent routine notification to ${students.length} students`);
+
+            // Send Push
+            sendGlobalPush('নতুন রুটিন! 🗓️', `ক্লাস: ${req.body.className || 'লাইভ'}, সময়: ${req.body.time}`, '/live-class-routine');
         }
 
         res.json(newRoutine);
@@ -186,6 +229,10 @@ router.post('/notifications', async (req, res) => {
     try {
         const newItem = new Notification(req.body);
         const saved = await newItem.save();
+
+        // Send Push for manual notifications too
+        sendGlobalPush(req.body.title, req.body.message, req.body.link);
+
         res.json(saved);
     } catch (err) {
         res.status(400).json({ message: err.message });

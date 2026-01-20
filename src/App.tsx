@@ -3,10 +3,11 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import { AIChatbot } from "./components/AIChatbot";
 import { Loader2 } from "lucide-react";
+import { usePushSubscription } from "./hooks/usePushSubscription";
 
 // Critical Pages (Static Import for faster LCP)
 import Index from "./pages/Index";
@@ -41,6 +42,24 @@ const PageLoader = () => (
   </div>
 );
 
+const PushSubscriptionWrapper = () => {
+  const { isSubscribed, subscribeToPush } = usePushSubscription();
+
+  useEffect(() => {
+    // Auto-prompt after 5 seconds if not subscribed
+    if (!isSubscribed) {
+      const timer = setTimeout(() => {
+        // You can make this conditional or a manual button in settings
+        // For now, we'll try to subscribe automatically (browser will handle permission prompt)
+        subscribeToPush();
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSubscribed]);
+
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -49,6 +68,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <ScrollToTop />
+          <PushSubscriptionWrapper />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Index />} />
