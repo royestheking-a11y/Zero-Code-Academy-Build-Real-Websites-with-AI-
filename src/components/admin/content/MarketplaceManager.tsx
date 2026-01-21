@@ -21,7 +21,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Edit, Trash2, Search, ExternalLink, RefreshCw, ShoppingCart, Upload } from "lucide-react";
+import { Plus, Edit, Trash2, Search, ExternalLink, RefreshCw, ShoppingCart, Upload, X, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 
@@ -212,27 +212,56 @@ export function MarketplaceManager() {
                                             </SelectContent>
                                         </Select>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label>থাম্বনেইল (Image Upload)</Label>
-                                        <div className="flex gap-2">
-                                            <Input
-                                                required
-                                                placeholder="https://..."
-                                                value={formData.thumbnail}
-                                                onChange={e => setFormData({ ...formData, thumbnail: e.target.value })}
-                                            />
-                                            <div className="relative">
+                                    <div className="space-y-3">
+                                        <Label>প্রজেক্ট থাম্বনেইল</Label>
+
+                                        {formData.thumbnail ? (
+                                            <div className="relative rounded-xl overflow-hidden border-2 border-primary/20 aspect-video group shadow-sm hover:shadow-md transition-all">
+                                                <img
+                                                    src={formData.thumbnail}
+                                                    alt="Preview"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        onClick={() => setFormData({ ...formData, thumbnail: '' })}
+                                                        className="gap-2"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" /> রিমুভ করুন
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="relative border-2 border-dashed rounded-xl p-8 hover:bg-muted/50 transition-colors text-center cursor-pointer group border-muted-foreground/25 hover:border-primary/50">
                                                 <input
                                                     type="file"
                                                     onChange={handleThumbnailUpload}
                                                     accept="image/*"
-                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                                    disabled={uploading}
                                                 />
-                                                <Button type="button" variant="outline" size="icon" disabled={uploading}>
-                                                    {uploading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                                                </Button>
+                                                <div className="flex flex-col items-center gap-3">
+                                                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                                        {uploading ? (
+                                                            <RefreshCw className="w-6 h-6 text-primary animate-spin" />
+                                                        ) : (
+                                                            <ImageIcon className="w-6 h-6 text-primary" />
+                                                        )}
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <p className="text-sm font-semibold text-foreground">
+                                                            {uploading ? "আপলোড হচ্ছে..." : "ছবি আপলোড করতে ক্লিক করুন"}
+                                                        </p>
+                                                        <p className="text-xs text-muted-foreground">
+                                                            SVG, PNG, JPG or GIF (max. 5MB)
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
                                 </div>
 
