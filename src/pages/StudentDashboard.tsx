@@ -369,7 +369,7 @@ export default function StudentDashboard() {
                               navigate(`/module/${module.id}`);
                             } else if (isAccessLocked) {
                               alert("এই মডিউলটি আপনার বর্তমান প্যাকেজে নেই। আপগ্রেড করুন।");
-                              window.open("https://wa.me/8801XXXXXXXXX?text=I%20want%20to%20upgrade%20my%20package", "_blank");
+                              window.open("https://api.whatsapp.com/send?phone=8801604710170&text=I%20want%20to%20upgrade%20my%20package", "_blank");
                             }
                           }}
                         >

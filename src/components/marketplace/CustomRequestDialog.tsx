@@ -39,7 +39,7 @@ const CustomRequestDialog = ({ projectTitle }: CustomRequestDialogProps) => {
                 `*Requirements:* ${formData.requirements}%0A%0A` +
                 `Please get back to me. Thanks!`;
 
-            const whatsappUrl = `https://wa.me/8801860640245?text=${message}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=8801604710170&text=${message}`;
 
             // In a real app, save to backend here first
             await new Promise(resolve => setTimeout(resolve, 1000)); // Fake API call
