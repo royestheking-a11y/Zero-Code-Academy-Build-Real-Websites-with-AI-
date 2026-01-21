@@ -12,6 +12,7 @@ import { TrustSection } from "@/components/TrustSection";
 import { FAQSection } from "@/components/FAQSection";
 import { Footer } from "@/components/Footer";
 import { EnrollmentToast } from "@/components/EnrollmentToast";
+import MarketplaceSection from "@/components/home/MarketplaceSection";
 
 import { SEO } from "@/components/SEO";
 
@@ -64,6 +65,7 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
+        <MarketplaceSection />
         <FeaturesSection />
         <ToolsCarousel />
         <ModulesSection />

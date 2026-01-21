@@ -3,6 +3,7 @@ import App from "./App.tsx";
 import "./index.css";
 
 import { HelmetProvider } from "react-helmet-async";
+import { CartProvider } from "./context/CartContext";
 
 // Register Service Worker
 if ('serviceWorker' in navigator) {
@@ -19,6 +20,8 @@ if ('serviceWorker' in navigator) {
 
 createRoot(document.getElementById("root")!).render(
     <HelmetProvider>
-        <App />
+        <CartProvider>
+            <App />
+        </CartProvider>
     </HelmetProvider>
 );

@@ -17,7 +17,8 @@ export function CouponManager() {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [newCoupon, setNewCoupon] = useState({
         code: "",
-        discountAmount: ""
+        discountAmount: "",
+        scope: "global"
     });
 
     // Delete state
@@ -32,10 +33,11 @@ export function CouponManager() {
             await addCouponMutation.mutateAsync({
                 code: newCoupon.code.toUpperCase(),
                 discountAmount: parseInt(newCoupon.discountAmount),
+                scope: newCoupon.scope as 'global' | 'course' | 'marketplace',
                 isActive: true
             });
             setIsAddOpen(false);
-            setNewCoupon({ code: "", discountAmount: "" });
+            setNewCoupon({ code: "", discountAmount: "", scope: "global" });
         } catch (error) {
             console.error(error);
         }
@@ -66,24 +68,24 @@ export function CouponManager() {
                 <div>
                     <h2 className="text-2xl font-bold flex items-center gap-2">
                         <Tag className="w-6 h-6 text-primary" />
-                        Coupon Manager
+                        কুপন ম্যানেজার
                     </h2>
-                    <p className="text-muted-foreground">Create and manage discount coupons</p>
+                    <p className="text-muted-foreground">ডিসকাউন্ট কুপন তৈরি এবং ম্যানেজ করুন</p>
                 </div>
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
                         <Button className="gap-2">
-                            <Plus className="w-4 h-4" /> Add Coupon
+                            <Plus className="w-4 h-4" /> কুপন যুক্ত করুন
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Add New Coupon</DialogTitle>
+                            <DialogTitle>নতুন কুপন যোগ করুন</DialogTitle>
                             <DialogDescription className="sr-only">Create a new discount coupon.</DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <Label>Coupon Code</Label>
+                                <Label>কুপন কোড</Label>
                                 <Input
                                     placeholder="e.g. SUMMER50"
                                     value={newCoupon.code}
@@ -91,7 +93,7 @@ export function CouponManager() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Discount Amount (৳)</Label>
+                                <Label>ডিসকাউন্ট পরিমাণ (৳)</Label>
                                 <Input
                                     type="number"
                                     placeholder="e.g. 500"
@@ -99,7 +101,19 @@ export function CouponManager() {
                                     onChange={(e) => setNewCoupon({ ...newCoupon, discountAmount: e.target.value })}
                                 />
                             </div>
-                            <Button className="w-full" onClick={handleAdd}>Create Coupon</Button>
+                            <div className="space-y-2">
+                                <Label>প্রযোজ্য ক্ষেত্র (Approves To)</Label>
+                                <select
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                    value={newCoupon.scope}
+                                    onChange={(e) => setNewCoupon({ ...newCoupon, scope: e.target.value })}
+                                >
+                                    <option value="global">Global (সবখানে)</option>
+                                    <option value="course">Course Only (শুধুমাত্র কোর্স)</option>
+                                    <option value="marketplace">Marketplace Only (শুধু মার্কেটপ্লেস)</option>
+                                </select>
+                            </div>
+                            <Button className="w-full" onClick={handleAdd}>কুপন তৈরি করুন</Button>
                         </div>
                     </DialogContent>
                 </Dialog>
@@ -109,10 +123,11 @@ export function CouponManager() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Code</TableHead>
-                            <TableHead>Discount</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead>কোড</TableHead>
+                            <TableHead>ডিসকাউন্ট</TableHead>
+                            <TableHead>স্কোপ</TableHead>
+                            <TableHead>স্ট্যাটাস</TableHead>
+                            <TableHead className="text-right">অ্যাকশন</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -120,6 +135,7 @@ export function CouponManager() {
                             <TableRow key={coupon.id}>
                                 <TableCell className="font-mono font-bold text-primary">{coupon.code}</TableCell>
                                 <TableCell>৳{coupon.discountAmount}</TableCell>
+                                <TableCell className="capitalize">{(coupon as any).scope || 'global'}</TableCell>
                                 <TableCell>
                                     <span className={`px-2 py-1 rounded-full text-xs font-bold ${coupon.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
                                         {coupon.isActive ? "Active" : "Inactive"}
@@ -134,8 +150,8 @@ export function CouponManager() {
                         ))}
                         {coupons.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                                    No coupons found. Create one to get started.
+                                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                                    কোন কুপন পাওয়া যায়নি। নতুন কুপন তৈরি করুন।
                                 </TableCell>
                             </TableRow>
                         )}
@@ -148,8 +164,8 @@ export function CouponManager() {
                 open={deleteDialogOpen}
                 onOpenChange={setDeleteDialogOpen}
                 onConfirm={confirmDelete}
-                title="Are you sure?"
-                description="This action cannot be undone. This will permanently delete the coupon."
+                title="আপনি কি নিশ্চিত?"
+                description="এই অ্যাকশনটি ফিরিয়ে আনা যাবে না। এটি কুপনটি স্থায়ীভাবে মুছে ফেলবে।"
                 isLoading={isDeleting}
             />
         </div >

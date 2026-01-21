@@ -39,9 +39,11 @@ import { PricingManager } from "@/components/admin/content/PricingManager";
 import { RoutineManager } from "@/components/admin/content/RoutineManager";
 import DemoManager from "@/components/admin/content/DemoManager";
 import { CouponManager } from "@/components/admin/content/CouponManager";
+import { MarketplaceManager } from "@/components/admin/content/MarketplaceManager";
+import AdminOrders from "@/components/admin/content/AdminOrders";
 
 // Hooks
-import { useEnrollments, useUpdateEnrollment, useDeleteEnrollment, Enrollment } from "@/hooks/useContent";
+import { useEnrollments, useUpdateEnrollment, useDeleteEnrollment, Enrollment, useOrders, useMarketplaceProjects } from "@/hooks/useContent";
 import { DeleteConfirmDialog } from "@/components/admin/DeleteConfirmDialog";
 
 export default function Admin() {
@@ -51,6 +53,9 @@ export default function Admin() {
 
   // Use React Query hooks for enrollments
   const { data: enrollments = [], refetch: refetchEnrollments } = useEnrollments();
+  const { data: orders = [] } = useOrders();
+  const { data: projects = [] } = useMarketplaceProjects();
+
   const updateEnrollmentMutation = useUpdateEnrollment();
   const deleteEnrollmentMutation = useDeleteEnrollment();
 
@@ -300,7 +305,7 @@ export default function Admin() {
 
       <main className="lg:pl-64 pt-16 lg:pt-8 transition-all duration-300">
         <div className="container-custom py-8 px-4 md:px-8">
-          {activeView === "dashboard" && <DashboardStats enrollments={enrollments} />}
+          {activeView === "dashboard" && <DashboardStats enrollments={enrollments} orders={orders} projects={projects} />}
           {activeView === "enrollments" && <EnrollmentView />}
           {activeView === "modules" && <ModulesManager />}
           {activeView === "features" && <FeaturesManager />}
@@ -308,7 +313,9 @@ export default function Admin() {
           {activeView === "routine" && <RoutineManager />}
           {activeView === "demo-videos" && <DemoManager />}
           {activeView === "coupons" && <CouponManager />}
-          {(activeView !== "dashboard" && activeView !== "enrollments" && activeView !== "modules" && activeView !== "features" && activeView !== "pricing" && activeView !== "routine" && activeView !== "demo-videos" && activeView !== "coupons") && (
+          {activeView === "marketplace" && <MarketplaceManager />}
+          {activeView === "orders" && <AdminOrders />}
+          {(activeView !== "dashboard" && activeView !== "enrollments" && activeView !== "modules" && activeView !== "features" && activeView !== "pricing" && activeView !== "routine" && activeView !== "demo-videos" && activeView !== "coupons" && activeView !== "orders" && activeView !== "marketplace") && (
             <div className="flex flex-col items-center justify-center min-h-[400px] text-muted-foreground animate-fade-in">
               <div className="bg-card border rounded-2xl p-8 text-center max-w-md">
                 <h3 className="text-xl font-bold text-foreground mb-2">শীঘ্রই আসছে</h3>

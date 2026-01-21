@@ -8,7 +8,9 @@ import {
     Calendar,
     Menu,
     Video,
-    Tag
+    Tag,
+    ShoppingCart,
+    Package
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -30,6 +32,8 @@ const SidebarContent = ({ activeView, onNavigate, onLogout }: AdminSidebarProps)
         { id: "routine", label: "রুটিন", icon: Calendar },
         { id: "demo-videos", label: "ডেমো ভিডিও", icon: Video },
         { id: "coupons", label: "কুপন", icon: Tag },
+        { id: "marketplace", label: "মার্কেটপ্লেস", icon: ShoppingCart },
+        { id: "orders", label: "অর্ডার ম্যানেজমেন্ট", icon: Package },
     ];
 
     return (

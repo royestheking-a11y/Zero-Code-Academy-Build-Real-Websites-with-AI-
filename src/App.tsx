@@ -30,6 +30,15 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 
+// Marketplace
+const MarketplaceLayout = lazy(() => import("./pages/marketplace/MarketplaceLayout"));
+const MarketplaceHome = lazy(() => import("./pages/marketplace/MarketplaceHome"));
+const CategoryPage = lazy(() => import("./pages/marketplace/CategoryPage"));
+const ProjectDetails = lazy(() => import("./pages/marketplace/ProjectDetails"));
+const CartPage = lazy(() => import("./pages/marketplace/CartPage"));
+const CheckoutPage = lazy(() => import("./pages/marketplace/CheckoutPage"));
+const OrderSuccessPage = lazy(() => import("./pages/marketplace/OrderSuccessPage"));
+
 const queryClient = new QueryClient();
 
 // Loading Fallback Component
@@ -87,6 +96,16 @@ const App = () => (
               <Route path="/settings" element={<Settings />} />
               <Route path="/certificates" element={<Certificates />} />
               <Route path="/live-routine" element={<LiveClassRoutine />} />
+
+              {/* Marketplace Routes */}
+              <Route path="/marketplace" element={<MarketplaceLayout />}>
+                <Route index element={<MarketplaceHome />} />
+                <Route path="category/:categoryId" element={<CategoryPage />} />
+                <Route path="project/:projectSlug" element={<ProjectDetails />} />
+                <Route path="cart" element={<CartPage />} />
+                <Route path="checkout" element={<CheckoutPage />} />
+                <Route path="order-success" element={<OrderSuccessPage />} />
+              </Route>
 
               {/* Legal Pages */}
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />

@@ -19,7 +19,8 @@ import {
   MoreVertical,
   X,
   FileText,
-  MessageSquare
+  MessageSquare,
+  ShoppingBag
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRoutine, useModules } from "@/hooks/useContent";
@@ -47,6 +48,72 @@ interface StudentData {
   currentModule: string;
   accessLimit?: number; // Added
 }
+
+// Sub-component for Orders
+import axios from 'axios';
+const MyOrdersList = ({ studentEmail }: { studentEmail?: string }) => {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!studentEmail) return;
+    const fetchOrders = async () => {
+      setLoading(true);
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+        const res = await axios.get(`${apiUrl}/orders?email=${studentEmail}`);
+        setOrders(res.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [studentEmail]);
+
+  if (loading) return <div className="text-center py-4 text-sm text-muted-foreground">Loading orders...</div>;
+  if (orders.length === 0) return <div className="text-center py-4 text-sm text-muted-foreground">No orders found.</div>;
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm text-left">
+        <thead className="bg-muted/50 text-muted-foreground">
+          <tr>
+            <th className="p-3 rounded-l-lg">Order ID</th>
+            <th className="p-3">Type</th>
+            <th className="p-3">Items</th>
+            <th className="p-3">Amount</th>
+            <th className="p-3">Status</th>
+            <th className="p-3 rounded-r-lg">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order.orderId} className="border-b last:border-0 hover:bg-muted/10">
+              <td className="p-3 font-mono font-bold text-primary">{order.orderId}</td>
+              <td className="p-3">{order.orderType}</td>
+              <td className="p-3 max-w-[200px] truncate">
+                {order.items?.map((i: any) => i.title).join(', ') || order.projectRef}
+              </td>
+              <td className="p-3 font-bold">৳{order.totalPrice}</td>
+              <td className="p-3">
+                <span className={`px-2 py-1 rounded text-xs font-bold ${order.status === 'Completed' ? 'bg-green-100 text-green-700' :
+                  order.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                  }`}>
+                  {order.status}
+                </span>
+              </td>
+              <td className="p-3 text-muted-foreground">
+                {new Date(order.createdAt).toLocaleDateString()}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
@@ -253,6 +320,16 @@ export default function StudentDashboard() {
                 <p className="text-xs md:text-sm text-muted-foreground line-clamp-1">{stat.sub}</p>
               </div>
             ))}
+          </div>
+
+          {/* My Orders Section */}
+          <div className="mb-12">
+            <div className="bg-card border rounded-2xl p-6">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <ShoppingBag className="w-5 h-5 text-primary" /> আমার অর্ডার
+              </h2>
+              <MyOrdersList studentEmail={studentData?.email} />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">

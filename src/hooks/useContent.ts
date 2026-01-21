@@ -452,3 +452,25 @@ export const useDeleteEnrollment = () => {
         }
     });
 };
+
+// --- Marketplace ---
+export const useMarketplaceProjects = () => {
+    return useQuery({
+        queryKey: ['marketplace-projects'],
+        queryFn: async () => {
+            const { data } = await api.get('/marketplace');
+            return data;
+        }
+    });
+};
+
+// --- Orders ---
+export const useOrders = () => {
+    return useQuery({
+        queryKey: ['orders'],
+        queryFn: async () => {
+            const { data } = await api.get('/orders');
+            return data;
+        }
+    });
+};

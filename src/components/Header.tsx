@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Settings, LogOut, LayoutDashboard, Award, Bell, CheckCircle, Calendar, AlertCircle, BookOpen, Check } from "lucide-react";
+import { Menu, X, User, Settings, LogOut, LayoutDashboard, Award, Bell, CheckCircle, Calendar, AlertCircle, BookOpen, Check, ShoppingBag } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   DropdownMenu,
@@ -12,14 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNotifications, useAddNotification, useMarkRead } from "@/hooks/useContent";
+import { useCart } from "@/context/CartContext";
 
 const navItems = [
   { label: "হোম", href: "/" },
   { label: "ফিচারসমূহ", href: "/#features" },
+  { label: "ওয়েবসাইট কিনুন", href: "/marketplace" },
   { label: "কারিকুলাম", href: "/#modules" },
   { label: "প্রাইসিং", href: "/#pricing" },
-  { label: "ডেমো", href: "/demo" },
-  { label: "জিজ্ঞাসিত প্রশ্ন", href: "/#faq" },
 ];
 
 export const Header = () => {
@@ -29,6 +29,8 @@ export const Header = () => {
   const [studentName, setStudentName] = useState("");
   const [studentPhoto, setStudentPhoto] = useState("");
   const [studentEmail, setStudentEmail] = useState("");
+  // const [cartCount, setCartCount] = useState(0); // Cart state - Replaced by Context
+  const { cartCount } = useCart();
 
   // Hooks
   const { data: notifications = [] } = useNotifications(studentEmail);
@@ -102,6 +104,7 @@ export const Header = () => {
       );
       case 'routine': return <Calendar className="w-4 h-4 text-blue-500" />;
       case 'enrollment': return <BookOpen className="w-4 h-4 text-purple-500" />;
+      case 'order': return <ShoppingBag className="w-4 h-4 text-blue-500" />;
       default: return <AlertCircle className="w-4 h-4 text-orange-500" />;
     }
   };
@@ -144,6 +147,19 @@ export const Header = () => {
 
         {/* User Profile or CTA */}
         <div className="hidden lg:flex items-center gap-4 shrink-0">
+
+          {/* Cart Icon */}
+          <Link to="/marketplace/cart">
+            <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-muted">
+              <ShoppingBag className="w-5 h-5 text-foreground" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-[10px] text-white flex items-center justify-center rounded-full font-bold">
+                  {cartCount}
+                </span>
+              )}
+            </Button>
+          </Link>
+
           {isLoggedIn ? (
             <>
               {/* Notifications Dropdown */}
@@ -259,7 +275,17 @@ export const Header = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="lg:hidden flex items-center gap-4">
+        <div className="lg:hidden flex items-center gap-2">
+          {/* Mobile Cart Icon */}
+          <Link to="/marketplace/cart">
+            <Button variant="ghost" size="icon" className="relative p-1 hover:bg-transparent">
+              <ShoppingBag className="w-6 h-6 text-foreground" />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-primary text-[10px] text-white flex items-center justify-center rounded-full font-bold border-2 border-background"></span>
+              )}
+            </Button>
+          </Link>
+
           {/* Mobile Bell (Only if Logged In) */}
           {isLoggedIn && (
             <DropdownMenu>
