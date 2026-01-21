@@ -144,11 +144,9 @@ const AdminOrders = () => {
                                                             }
                                                         } else {
                                                             // Local MongoDB API Path -> Prepend API URL if needed, or assume relative works if key is full path
-                                                            // The backend returns `/api/files/:id` in `fileUrl`.
+                                                            // The backend returns `/api/upload/:id` in `fileUrl`.
                                                             const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-                                                            // Remove /api from base if fileUrl already has it... actually fileUrl is /api/files/...
-                                                            // So if VITE_API_URL is http://localhost:5001/api, we just want http://localhost:5001
-                                                            // Let's just construct absolute URL manually for safety
+                                                            // Remove /api from base...
                                                             const baseUrl = apiUrl.replace('/api', '');
                                                             url = `${baseUrl}${file.url}`;
                                                         }

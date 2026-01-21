@@ -11,7 +11,7 @@ const upload = multer({
 });
 
 // POST: Upload File to MongoDB
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
@@ -34,7 +34,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
             message: 'File uploaded successfully',
             fileId: savedFile._id,
             // Constructing a "virtual" URL that the frontend can use to download it
-            fileUrl: `/api/files/${savedFile._id}`,
+            fileUrl: `/api/upload/${savedFile._id}`,
             originalName: savedFile.filename
         });
 
