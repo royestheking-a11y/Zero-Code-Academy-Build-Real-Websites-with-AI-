@@ -61,8 +61,8 @@ const CheckoutPage = () => {
         if (!file) return;
 
         // Basic validation
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error("ফাইলের সাইজ ৫MB এর নিচে হতে হবে।");
+        if (file.size > 20 * 1024 * 1024) {
+            toast.error("ফাইলের সাইজ ২০MB এর নিচে হতে হবে।");
             return;
         }
 
