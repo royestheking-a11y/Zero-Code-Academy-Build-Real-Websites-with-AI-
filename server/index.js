@@ -34,7 +34,7 @@ app.use('/api/enrollments', require('./routes/enrollments'));
 app.use('/api/push', require('./routes/push'));
 app.use('/api/marketplace', require('./routes/marketplace')); // Website Marketplace
 app.use('/api/orders', require('./routes/orders')); // Order Management
-app.use('/api/upload', require('./routes/upload')); // File Uploads
+app.use('/api/upload', require('./routes/files')); // File Uploads (MongoDB)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

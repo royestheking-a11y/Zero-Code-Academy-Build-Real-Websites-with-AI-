@@ -133,11 +133,26 @@ const AdminOrders = () => {
                                                     size="sm"
                                                     className="h-auto p-0 flex items-center gap-1 text-xs text-blue-600 hover:underline justify-start"
                                                     onClick={() => {
-                                                        // Force download using Cloudinary flag or generic download
+                                                        // Direct download from our API
+                                                        // If it's a Cloudinary URL (legacy), try opening it.
+                                                        // If it's a MongoDB URL (e.g. /api/files/...) open it in new tab which triggers download.
                                                         let url = file.url;
-                                                        if (url.includes('cloudinary.com') && url.includes('/upload/')) {
-                                                            url = url.replace('/upload/', '/upload/fl_attachment/');
+                                                        if (url.startsWith('http') || url.startsWith('https')) {
+                                                            // Legacy Cloudinary Logic
+                                                            if (url.includes('cloudinary.com') && url.includes('/upload/')) {
+                                                                url = url.replace('/upload/', '/upload/fl_attachment/');
+                                                            }
+                                                        } else {
+                                                            // Local MongoDB API Path -> Prepend API URL if needed, or assume relative works if key is full path
+                                                            // The backend returns `/api/files/:id` in `fileUrl`.
+                                                            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+                                                            // Remove /api from base if fileUrl already has it... actually fileUrl is /api/files/...
+                                                            // So if VITE_API_URL is http://localhost:5001/api, we just want http://localhost:5001
+                                                            // Let's just construct absolute URL manually for safety
+                                                            const baseUrl = apiUrl.replace('/api', '');
+                                                            url = `${baseUrl}${file.url}`;
                                                         }
+
                                                         window.open(url, '_blank');
                                                     }}
                                                 >
