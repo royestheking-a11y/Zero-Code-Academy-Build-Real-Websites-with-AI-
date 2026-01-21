@@ -1,68 +1,63 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
 
-// Ensure upload directory exists
-const uploadDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Configure Storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        // Unique filename: fieldname-timestamp-random.ext
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-// File Filter (Optional: PDF, TXT, Images)
-const fileFilter = (req, file, cb) => {
-    const allowedTypes = /pdf|txt|doc|docx|png|jpg|jpeg/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowedTypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-        return cb(null, true);
-    } else {
-        cb(new Error('Only .pdf, .txt, .doc, .docx and images are allowed!'));
-    }
-};
-
+// Configure Multer (Memory Storage)
+const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-    fileFilter: fileFilter
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
 });
 
+// Helper: Upload Message to Cloudinary
+const uploadFromBuffer = (buffer) => {
+    return new Promise((resolve, reject) => {
+        const cld_upload_stream = cloudinary.uploader.upload_stream(
+            {
+                folder: "zero_code_marketplace",
+                resource_type: "auto", // Detects image/pdf/raw
+            },
+            (error, result) => {
+                if (result) {
+                    resolve(result);
+                } else {
+                    reject(error);
+                }
+            }
+        );
+        streamifier.createReadStream(buffer).pipe(cld_upload_stream);
+    });
+};
+
 // Route: POST /api/upload
-router.post('/', upload.single('file'), (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
 
-        // Construct public URL
-        // Check if using local server or deployed
-        // For local: http://localhost:PORT/uploads/filename
-        // For local: http://localhost:PORT/uploads/filename
-        const baseUrl = process.env.SERVER_URL || process.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5001';
-        const fileUrl = `${baseUrl}/uploads/${req.file.filename}`;
+        const result = await uploadFromBuffer(req.file.buffer);
+
+        console.log("Cloudinary Upload Success:", result.secure_url);
 
         res.status(200).json({
             message: 'File uploaded successfully',
-            fileUrl: fileUrl,
+            fileUrl: result.secure_url, // Cloudinary URL
+            publicId: result.public_id,
             originalName: req.file.originalname
         });
     } catch (error) {
         console.error('Upload Error:', error);
-        res.status(500).json({ message: 'Server Error during upload' });
+        res.status(500).json({ message: 'Cloudinary upload failed' });
     }
 });
 

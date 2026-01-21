@@ -21,7 +21,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Edit, Trash2, Search, ExternalLink, RefreshCw, ShoppingCart } from "lucide-react";
+import { Plus, Edit, Trash2, Search, ExternalLink, RefreshCw, ShoppingCart, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 
@@ -61,6 +61,7 @@ export function MarketplaceManager() {
         demoUrl: "",
         originalPrice: 0
     });
+    const [uploading, setUploading] = useState(false);
 
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
@@ -138,6 +139,28 @@ export function MarketplaceManager() {
         }
     };
 
+    const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const uploadData = new FormData();
+        uploadData.append('file', file);
+
+        try {
+            const res = await axios.post(`${apiUrl}/upload`, uploadData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            setFormData({ ...formData, thumbnail: res.data.fileUrl });
+            toast({ title: "সফল", description: "থাম্বনেইল আপলোড হয়েছে!" });
+        } catch (error) {
+            console.error("Upload error:", error);
+            toast({ title: "ত্রুটি", description: "আপলোড ব্যর্থ হয়েছে", variant: "destructive" });
+        } finally {
+            setUploading(false);
+        }
+    };
+
     const filteredProjects = projects.filter(p =>
         p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.category.toLowerCase().includes(searchTerm.toLowerCase())
@@ -190,8 +213,26 @@ export function MarketplaceManager() {
                                         </Select>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label>থাম্বনেইল URL</Label>
-                                        <Input required placeholder="https://..." value={formData.thumbnail} onChange={e => setFormData({ ...formData, thumbnail: e.target.value })} />
+                                        <Label>থাম্বনেইল (Image Upload)</Label>
+                                        <div className="flex gap-2">
+                                            <Input
+                                                required
+                                                placeholder="https://..."
+                                                value={formData.thumbnail}
+                                                onChange={e => setFormData({ ...formData, thumbnail: e.target.value })}
+                                            />
+                                            <div className="relative">
+                                                <input
+                                                    type="file"
+                                                    onChange={handleThumbnailUpload}
+                                                    accept="image/*"
+                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                                />
+                                                <Button type="button" variant="outline" size="icon" disabled={uploading}>
+                                                    {uploading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                                                </Button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
