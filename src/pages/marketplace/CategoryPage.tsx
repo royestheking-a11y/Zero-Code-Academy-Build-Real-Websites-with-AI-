@@ -3,72 +3,55 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ExternalLink, Code, Layout, Layers } from 'lucide-react';
 
-// Mock Data (Replace with API call later)
-const MOCK_PROJECTS = [
-    {
-        id: '1',
-        slug: 'modern-saas-landing',
-        title: 'Modern SaaS Landing Page',
-        category: 'custom-code',
-        price: 5000,
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-        tech: ['React', 'Tailwind', 'Framer Motion']
-    },
-    {
-        id: '2',
-        slug: 'university-portal',
-        title: 'University Management Portal',
-        category: 'university-projects',
-        price: 8000,
-        image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=800',
-        tech: ['MERN Stack', 'Redux']
-    },
-    {
-        id: '3',
-        slug: 'creative-portfolio',
-        title: 'Creative Agency Portfolio',
-        category: 'framer',
-        price: 3000,
-        image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800',
-        tech: ['Framer', 'No-Code']
-    },
-    {
-        id: '4',
-        slug: 'ecommerce-store',
-        title: 'Fashion E-commerce Store',
-        category: 'wordpress',
-        price: 4500,
-        image: 'https://images.unsplash.com/photo-1472851294608-415105022054?auto=format&fit=crop&q=80&w=800',
-        tech: ['WordPress', 'WooCommerce']
-    },
-    {
-        id: '5',
-        slug: 'tech-blog-pro',
-        title: 'Tech Blog Pro',
-        category: 'custom-code',
-        price: 4000,
-        image: 'https://images.unsplash.com/photo-1499750310159-525446b08ef5?auto=format&fit=crop&q=80&w=800',
-        tech: ['Next.js', 'MDX']
-    }
-];
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { toast } from 'sonner';
+
+interface Project {
+    _id: string;
+    slug: string;
+    title: string;
+    category: string;
+    price: number;
+    thumbnail: string;
+    techStack: string[];
+}
 
 const CategoryPage = () => {
     const { categoryId } = useParams();
     const categoryName = categoryId?.replace(/-/g, ' ');
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // Filter projects (loose matching for mock)
-    const projects = MOCK_PROJECTS.filter(p =>
-        categoryId === 'all' ||
-        p.category === categoryId ||
-        (categoryId === 'custom-code' && p.category === 'custom-code') || // Strict-ish
-        true // JUST SHOW ALL FOR DEMO if filter empty
-    ).filter(p => categoryId === 'all' ? true : p.category.includes(categoryId || ''));
+    useEffect(() => {
+        const fetchProjects = async () => {
+            setLoading(true);
+            try {
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+                const res = await axios.get(`${apiUrl}/marketplace`);
 
-    // If "custom-code" selected, show only custom code. For demo, showing mix if only few.
-    // Let's refine mock logic:
-    const filteredProjects = MOCK_PROJECTS.filter(p => !categoryId || categoryId === 'all' || p.category === categoryId);
-    // Fallback to showing all if none match just so the page isn't empty during dev
-    const displayProjects = filteredProjects.length > 0 ? filteredProjects : MOCK_PROJECTS;
+                // Filter client side for now (or backend support ?category=x)
+                // Mapping URL id (e.g. 'custom-code') to DB Category (e.g. 'Custom Code')
+                const allProjects = res.data;
+                const filtered = allProjects.filter((p: any) => {
+                    if (!categoryId || categoryId === 'all') return true;
+                    // Loose match: 'Custom Code' -> 'custom-code'
+                    const dbCat = p.category.toLowerCase().replace(/ /g, '-');
+                    return dbCat.includes(categoryId.toLowerCase());
+                });
+
+                setProjects(filtered);
+            } catch (error) {
+                console.error("Failed to load projects", error);
+                toast.error("প্রজেক্ট লোড করতে সমস্যা হয়েছে");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProjects();
+    }, [categoryId]);
+
+    const displayProjects = projects;
 
 
     return (
@@ -84,57 +67,61 @@ const CategoryPage = () => {
                 <p className="text-muted-foreground text-lg">Browse our premium collection of {categoryName} templates.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {displayProjects.map((project, idx) => (
-                    <motion.div
-                        key={project.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="group bg-card rounded-2xl overflow-hidden border hover:shadow-xl transition-all duration-300 flex flex-col"
-                    >
-                        {/* Thumbnail */}
-                        <div className="relative aspect-video overflow-hidden bg-muted">
-                            <img
-                                src={project.image}
-                                alt={project.title}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                            <div className="absolute top-3 right-3 bg-background/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold border">
-                                {project.category.replace('-', ' ')}
-                            </div>
-                        </div>
-
-                        {/* Content */}
-                        <div className="p-6 flex-1 flex flex-col">
-                            <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{project.title}</h3>
-
-                            {/* Tags */}
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                {project.tech.map(t => (
-                                    <span key={t} className="text-[10px] uppercase tracking-wider px-2 py-1 bg-secondary rounded-sm font-medium text-secondary-foreground">
-                                        {t}
-                                    </span>
-                                ))}
-                            </div>
-
-                            <div className="mt-auto pt-4 flex items-center justify-between border-t">
-                                <div>
-                                    <p className="text-xs text-muted-foreground">Starting from</p>
-                                    <p className="text-xl font-bold text-primary">৳{project.price.toLocaleString()}</p>
+            {loading ? (
+                <div className="text-center py-20">লোড হচ্ছে...</div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {displayProjects.map((project, idx) => (
+                        <motion.div
+                            key={project._id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                            className="group bg-card rounded-2xl overflow-hidden border hover:shadow-xl transition-all duration-300 flex flex-col"
+                        >
+                            {/* Thumbnail */}
+                            <div className="relative aspect-video overflow-hidden bg-muted">
+                                <img
+                                    src={project.thumbnail}
+                                    alt={project.title}
+                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                />
+                                <div className="absolute top-3 right-3 bg-background/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold border">
+                                    {project.category}
                                 </div>
-                                <Link to={`/marketplace/project/${project.slug}`}>
-                                    <Button size="sm" className="gap-2">
-                                        View Details <ExternalLink className="w-3 h-3" />
-                                    </Button>
-                                </Link>
                             </div>
-                        </div>
-                    </motion.div>
-                ))}
-            </div>
 
-            {filteredProjects.length === 0 && (
+                            {/* Content */}
+                            <div className="p-6 flex-1 flex flex-col">
+                                <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{project.title}</h3>
+
+                                {/* Tags */}
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {project.techStack?.map(t => (
+                                        <span key={t} className="text-[10px] uppercase tracking-wider px-2 py-1 bg-secondary rounded-sm font-medium text-secondary-foreground">
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <div className="mt-auto pt-4 flex items-center justify-between border-t">
+                                    <div>
+                                        <p className="text-xs text-muted-foreground">Starting from</p>
+                                        <p className="text-xl font-bold text-primary">৳{project.price.toLocaleString()}</p>
+                                    </div>
+                                    <Link to={`/marketplace/project/${project.slug}`}>
+                                        <Button size="sm" className="gap-2">
+                                            View Details <ExternalLink className="w-3 h-3" />
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            )}
+
+            {!loading && displayProjects.length === 0 && (
                 <div className="text-center py-20 bg-muted/20 rounded-xl border border-dashed">
                     <p className="text-muted-foreground">No specific templates found for this category yet.</p>
                     <Link to="/marketplace">
