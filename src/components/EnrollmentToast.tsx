@@ -96,7 +96,7 @@ export const EnrollmentToast = () => {
             {randomName} <span className="font-normal text-muted-foreground">from</span> {randomLocation}
           </p>
           <p className="text-xs text-muted-foreground mt-0.5">
-            এইমাত্র <span className="font-semibold text-primary">Full Stack Course</span> এ এনরোল করেছেন! 🔥
+            এইমাত্র <span className="font-semibold text-primary">Full Stack Course</span> এ এনরোল করেছেন!
           </p>
           <p className="text-[10px] text-muted-foreground/70 mt-1">{minutesAgo} মিনিট আগে</p>
         </div>
@@ -135,7 +135,7 @@ export const EnrollmentToast = () => {
             {randomName}
           </p>
           <p className="text-xs text-muted-foreground mt-0.5">
-            <span className="font-semibold text-purple-600">{randomProject}</span> টি অর্ডার করেছেন! 🚀
+            <span className="font-semibold text-purple-600">{randomProject}</span> টি অর্ডার করেছেন!
           </p>
           <p className="text-[10px] text-muted-foreground/70 mt-1">{minutesAgo} মিনিট আগে</p>
         </div>
