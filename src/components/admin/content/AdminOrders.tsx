@@ -127,16 +127,23 @@ const AdminOrders = () => {
                                     {order.files && order.files.length > 0 ? (
                                         <div className="flex flex-col gap-1">
                                             {order.files.map((file: any, idx: number) => (
-                                                <a
+                                                <Button
                                                     key={idx}
-                                                    href={file.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-auto p-0 flex items-center gap-1 text-xs text-blue-600 hover:underline justify-start"
+                                                    onClick={() => {
+                                                        // Force download using Cloudinary flag or generic download
+                                                        let url = file.url;
+                                                        if (url.includes('cloudinary.com') && url.includes('/upload/')) {
+                                                            url = url.replace('/upload/', '/upload/fl_attachment/');
+                                                        }
+                                                        window.open(url, '_blank');
+                                                    }}
                                                 >
-                                                    <Paperclip className="w-3 h-3" />
-                                                    {file.name || 'সংযুক্ত ফাইল'}
-                                                </a>
+                                                    <Download className="w-3 h-3" />
+                                                    Download {file.name || 'File'}
+                                                </Button>
                                             ))}
                                         </div>
                                     ) : (
