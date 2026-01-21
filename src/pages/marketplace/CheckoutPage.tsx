@@ -20,6 +20,40 @@ const CheckoutPage = () => {
     // Generate unique reference code
     const [paymentRef] = useState(`REF-${Math.floor(1000 + Math.random() * 9000)}`);
 
+    // Coupon State
+    const [coupon, setCoupon] = useState("");
+    const [discount, setDiscount] = useState(0);
+    const [couponLoading, setCouponLoading] = useState(false);
+
+    const handleApplyCoupon = async () => {
+        if (!coupon.trim()) return;
+        setCouponLoading(true);
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+            const res = await axios.get(`${apiUrl}/coupons`);
+            const coupons = res.data;
+
+            const matchedCoupon = coupons.find((c: any) =>
+                c.code === coupon.trim().toUpperCase() &&
+                c.isActive &&
+                (c.scope === 'marketplace' || c.scope === 'global')
+            );
+
+            if (matchedCoupon) {
+                setDiscount(matchedCoupon.discountAmount);
+                toast.success(`কুপন কোড অ্যাপ্লাই করা হয়েছে! (৳${matchedCoupon.discountAmount} ছাড়)`);
+            } else {
+                setDiscount(0);
+                toast.error("ভুল কুপন কোড বা এই সার্ভিসের জন্য প্রযোজ্য নয়!");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("কুপন যাচাই করা সম্ভব হয়নি।");
+        } finally {
+            setCouponLoading(false);
+        }
+    };
+
     // Form State
     const [formData, setFormData] = useState({
         name: '',
@@ -99,7 +133,7 @@ const CheckoutPage = () => {
                 address: "Digital Delivery",
                 orderType: 'Template',
                 items: cart.map(i => ({ projectId: i.id, title: i.title, price: i.price })),
-                totalPrice: cartTotal,
+                totalPrice: cartTotal - discount,
                 paymentMethod: formData.paymentMethod,
                 paymentStatus: 'Pending',
                 status: 'Processing',
@@ -309,7 +343,29 @@ const CheckoutPage = () => {
                             ))}
                             <div className="border-t my-2 pt-2 flex justify-between font-bold text-lg">
                                 <span>সর্বমোট</span>
-                                <span className="text-primary">৳{cartTotal.toLocaleString()}</span>
+                                <span className="text-primary">৳{(cartTotal - discount).toLocaleString()}</span>
+                            </div>
+
+                            {/* Coupon Section */}
+                            <div className="mt-4 pt-4 border-t space-y-3">
+                                <Label>কুপন কোড</Label>
+                                <div className="flex gap-2">
+                                    <Input
+                                        placeholder="Enter Code"
+                                        value={coupon}
+                                        onChange={(e) => setCoupon(e.target.value)}
+                                        disabled={discount > 0}
+                                    />
+                                    <Button onClick={handleApplyCoupon} disabled={couponLoading || !coupon || discount > 0} variant="outline">
+                                        {couponLoading ? "Checking..." : discount > 0 ? "Applied" : "Apply"}
+                                    </Button>
+                                </div>
+                                {discount > 0 && (
+                                    <div className="text-green-600 text-sm font-medium flex justify-between">
+                                        <span>ডিসকাউন্ট অ্যাপ্লাইড!</span>
+                                        <span>-৳{discount}</span>
+                                    </div>
+                                )}
                             </div>
 
                             <Button

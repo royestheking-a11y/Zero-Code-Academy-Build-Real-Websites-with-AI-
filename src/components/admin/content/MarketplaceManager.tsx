@@ -256,7 +256,7 @@ export function MarketplaceManager() {
                                                             {uploading ? "আপলোড হচ্ছে..." : "ছবি আপলোড করতে ক্লিক করুন"}
                                                         </p>
                                                         <p className="text-xs text-muted-foreground">
-                                                            SVG, PNG, JPG or GIF (max. 5MB)
+                                                            SVG, PNG, JPG or GIF (max. 20MB)
                                                         </p>
                                                     </div>
                                                 </div>
