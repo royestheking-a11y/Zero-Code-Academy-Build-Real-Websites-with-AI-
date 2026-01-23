@@ -192,10 +192,10 @@ const AdminOrders = () => {
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Pending">Pending (অপেক্ষমান)</SelectItem>
-                                            <SelectItem value="Processing">Processing (চলমান)</SelectItem>
-                                            <SelectItem value="Completed">Completed (সম্পন্ন)</SelectItem>
-                                            <SelectItem value="Cancelled">Cancelled (বাতিল)</SelectItem>
+                                            <SelectItem value="Pending">অপেক্ষমান</SelectItem>
+                                            <SelectItem value="Processing">চলমান</SelectItem>
+                                            <SelectItem value="Completed">সম্পন্ন</SelectItem>
+                                            <SelectItem value="Cancelled">বাতিল</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </TableCell>

@@ -148,10 +148,11 @@ export function MarketplaceManager() {
         uploadData.append('file', file);
 
         try {
-            const res = await axios.post(`${apiUrl}/upload`, uploadData, {
+            const res = await axios.post(`${apiUrl}/upload-image`, uploadData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            setFormData({ ...formData, thumbnail: res.data.fileUrl });
+            console.log("Upload response:", res.data);
+            setFormData(prev => ({ ...prev, thumbnail: res.data.fileUrl }));
             toast({ title: "সফল", description: "থাম্বনেইল আপলোড হয়েছে!" });
         } catch (error) {
             console.error("Upload error:", error);
