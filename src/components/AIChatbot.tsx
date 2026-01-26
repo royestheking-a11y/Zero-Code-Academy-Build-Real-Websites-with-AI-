@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, X, Send, Bot, User, ArrowRight } from "lucide-react";
 import { getAIResponse } from "@/lib/zCodeAI";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   id: string;
@@ -30,6 +30,7 @@ export const AIChatbot = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -116,8 +117,8 @@ export const AIChatbot = () => {
             >
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${message.role === "user"
-                    ? "bg-primary"
-                    : "gradient-bg"
+                  ? "bg-primary"
+                  : "gradient-bg"
                   }`}
               >
                 {message.role === "user" ? (
@@ -128,8 +129,8 @@ export const AIChatbot = () => {
               </div>
               <div
                 className={`max-w-[75%] rounded-2xl px-4 py-3 ${message.role === "user"
-                    ? "bg-primary text-primary-foreground rounded-tr-none"
-                    : "bg-card border rounded-tl-none"
+                  ? "bg-primary text-primary-foreground rounded-tr-none"
+                  : "bg-card border rounded-tl-none"
                   }`}
               >
                 <p className="text-sm whitespace-pre-line leading-relaxed mb-2">{message.content}</p>
@@ -150,12 +151,18 @@ export const AIChatbot = () => {
                 )}
 
                 {message.action === "enroll" && (
-                  <Link to="/enroll">
-                    <Button variant="cta" size="sm" className="w-full mt-2 group">
-                      এখনই এনরোল করুন
-                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="cta"
+                    size="sm"
+                    className="w-full mt-2 group"
+                    onClick={() => {
+                      setIsOpen(false);
+                      navigate("/enroll");
+                    }}
+                  >
+                    এখনই এনরোল করুন
+                    <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </Button>
                 )}
               </div>
             </div>

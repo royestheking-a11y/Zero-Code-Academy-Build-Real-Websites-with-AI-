@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import { AIChatbot } from "./components/AIChatbot";
@@ -75,49 +75,47 @@ const App = () => (
       <div onContextMenu={(e) => e.preventDefault()}>
         <Toaster />
         <Sonner />
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <ScrollToTop />
-          <PushSubscriptionWrapper />
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/demo" element={<Demo />} />
-              <Route path="/enroll" element={<Enroll />} />
-              <Route path="/feature/:featureId" element={<FeatureDetail />} />
-              <Route path="/module/:moduleId" element={<ModuleDetail />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/admin/:section" element={<Admin />} />
-              <Route path="/student-dashboard" element={<StudentDashboard />} />
-              <Route path="/payment" element={<Payment />} />
+        <ScrollToTop />
+        <PushSubscriptionWrapper />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/demo" element={<Demo />} />
+            <Route path="/enroll" element={<Enroll />} />
+            <Route path="/feature/:featureId" element={<FeatureDetail />} />
+            <Route path="/module/:moduleId" element={<ModuleDetail />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/:section" element={<Admin />} />
+            <Route path="/student-dashboard" element={<StudentDashboard />} />
+            <Route path="/payment" element={<Payment />} />
 
-              {/* Dashboard Pages */}
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/certificates" element={<Certificates />} />
-              <Route path="/live-routine" element={<LiveClassRoutine />} />
+            {/* Dashboard Pages */}
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/certificates" element={<Certificates />} />
+            <Route path="/live-routine" element={<LiveClassRoutine />} />
 
-              {/* Marketplace Routes */}
-              <Route path="/marketplace" element={<MarketplaceLayout />}>
-                <Route index element={<MarketplaceHome />} />
-                <Route path="category/:categoryId" element={<CategoryPage />} />
-                <Route path="project/:projectSlug" element={<ProjectDetails />} />
-                <Route path="cart" element={<CartPage />} />
-                <Route path="checkout" element={<CheckoutPage />} />
-                <Route path="order-success" element={<OrderSuccessPage />} />
-              </Route>
+            {/* Marketplace Routes */}
+            <Route path="/marketplace" element={<MarketplaceLayout />}>
+              <Route index element={<MarketplaceHome />} />
+              <Route path="category/:categoryId" element={<CategoryPage />} />
+              <Route path="project/:projectSlug" element={<ProjectDetails />} />
+              <Route path="cart" element={<CartPage />} />
+              <Route path="checkout" element={<CheckoutPage />} />
+              <Route path="order-success" element={<OrderSuccessPage />} />
+            </Route>
 
-              {/* Legal Pages */}
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-              <Route path="/refund-policy" element={<RefundPolicy />} />
+            {/* Legal Pages */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
 
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-          <AIChatbot />
-        </BrowserRouter>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+        <AIChatbot />
       </div>
     </TooltipProvider>
   </QueryClientProvider >
